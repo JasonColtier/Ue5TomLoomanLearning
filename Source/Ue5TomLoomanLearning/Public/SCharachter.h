@@ -6,6 +6,12 @@
 #include "GameFramework/Character.h"
 #include "SCharachter.generated.h"
 
+struct FInputActionValue;
+class USpringArmComponent;
+class UCameraComponent;
+class UInputMappingContext;
+class UInputAction;
+
 UCLASS()
 class UE5TOMLOOMANLEARNING_API ASCharachter : public ACharacter
 {
@@ -16,6 +22,19 @@ public:
 	ASCharachter();
 
 protected:
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* SpringArmComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere)
+	UInputMappingContext* InputMappingContext;
+
+	UPROPERTY(EditAnywhere)
+	UInputAction* IA_MoveHorizontal;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -25,4 +44,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	void EnhancedInputMoveHorizontal(const FInputActionValue& Value);
 };

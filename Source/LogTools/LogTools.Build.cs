@@ -2,13 +2,13 @@
 
 using UnrealBuildTool;
 
-public class Ue5TomLoomanLearning : ModuleRules
+public class LogTools : ModuleRules
 {
-	public Ue5TomLoomanLearning(ReadOnlyTargetRules Target) : base(Target)
+	public LogTools(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","EnhancedInput","LogTools" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
