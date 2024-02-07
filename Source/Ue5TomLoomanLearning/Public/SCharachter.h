@@ -29,11 +29,14 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,Category="Input")
 	UInputMappingContext* InputMappingContext;
 
-	UPROPERTY(EditAnywhere)
-	UInputAction* IA_MoveHorizontal;
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* IA_MoveX;
+
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* IA_MoveY;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,5 +49,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
-	void EnhancedInputMoveHorizontal(const FInputActionValue& Value);
+	void EnhancedInputMoveX(const FInputActionValue& Value);
+	void EnhancedInputMoveY(const FInputActionValue& Value);
 };

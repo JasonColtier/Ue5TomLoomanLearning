@@ -50,11 +50,19 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	}
 	
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	EnhancedInputComponent->BindAction(IA_MoveHorizontal,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveHorizontal);
+	EnhancedInputComponent->BindAction(IA_MoveX,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveX);
+	EnhancedInputComponent->BindAction(IA_MoveY,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveY);
 }
 
-void ASCharachter::EnhancedInputMoveHorizontal(const FInputActionValue& Value)
+void ASCharachter::EnhancedInputMoveX(const FInputActionValue& Value)
 {
-	TRACE("MOVE ! ")
+	TRACE("MOVE ! %s",*Value.ToString())
+	AddMovementInput(FVector::RightVector,Value.Get<float>());
+}
+
+void ASCharachter::EnhancedInputMoveY(const FInputActionValue& Value)
+{
+	TRACE("MOVE ! %s",*Value.ToString())
+	AddMovementInput(FVector::ForwardVector,Value.Get<float>());
 }
 
