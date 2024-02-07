@@ -37,6 +37,11 @@ protected:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	UInputAction* IA_MoveY;
+	
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* IA_MoveTurn;
+
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -51,4 +56,5 @@ public:
 private:
 	void EnhancedInputMoveX(const FInputActionValue& Value);
 	void EnhancedInputMoveY(const FInputActionValue& Value);
+	void EnhancedInputTurn(const FInputActionValue& Value);
 };

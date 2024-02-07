@@ -52,17 +52,24 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	EnhancedInputComponent->BindAction(IA_MoveX,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveX);
 	EnhancedInputComponent->BindAction(IA_MoveY,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveY);
+	EnhancedInputComponent->BindAction(IA_MoveTurn,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputTurn);
 }
 
 void ASCharachter::EnhancedInputMoveX(const FInputActionValue& Value)
 {
 	TRACE("MOVE ! %s",*Value.ToString())
-	AddMovementInput(FVector::RightVector,Value.Get<float>());
+	AddMovementInput(GetActorRightVector(),Value.Get<float>());
 }
 
 void ASCharachter::EnhancedInputMoveY(const FInputActionValue& Value)
 {
 	TRACE("MOVE ! %s",*Value.ToString())
-	AddMovementInput(FVector::ForwardVector,Value.Get<float>());
+	AddMovementInput(GetActorForwardVector(),Value.Get<float>());
+}
+
+void ASCharachter::EnhancedInputTurn(const FInputActionValue& Value)
+{
+	TRACE("Turn ! %s",*Value.ToString())
+	AddControllerYawInput(Value.Get<float>());
 }
 
