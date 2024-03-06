@@ -6,6 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "LogTools/LogTools.h"
 
@@ -16,10 +17,16 @@ ASCharachter::ASCharachter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->bUsePawnControlRotation = true;
+	
+	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 
 	SpringArmComponent->SetupAttachment(RootComponent);
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
@@ -52,7 +59,9 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	EnhancedInputComponent->BindAction(IA_MoveX,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveX);
 	EnhancedInputComponent->BindAction(IA_MoveY,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputMoveY);
-	EnhancedInputComponent->BindAction(IA_MoveTurn,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputTurn);
+	EnhancedInputComponent->BindAction(IA_CamYaw,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputTurn);
+	EnhancedInputComponent->BindAction(IA_CamPitch,ETriggerEvent::Triggered,this,&ASCharachter::EnhancedInputPitch);
+	EnhancedInputComponent->BindAction(IA_PrimaryAction,ETriggerEvent::Started,this,&ASCharachter::PrimaryAttack);
 }
 
 void ASCharachter::EnhancedInputMoveX(const FInputActionValue& Value)
@@ -71,5 +80,20 @@ void ASCharachter::EnhancedInputTurn(const FInputActionValue& Value)
 {
 	TRACE("Turn ! %s",*Value.ToString())
 	AddControllerYawInput(Value.Get<float>());
+}
+
+void ASCharachter::EnhancedInputPitch(const FInputActionValue& Value)
+{
+	TRACE("Pitch ! %s",*Value.ToString())
+	AddControllerPitchInput(Value.Get<float>());
+}
+
+void ASCharachter::PrimaryAttack(const FInputActionValue& Value)
+{
+	TRACE("Spawn Projectile !");
+	const FTransform SpawnTM = FTransform(GetControlRotation(),GetMesh()->GetSocketLocation("Muzzle_01"));
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	GetWorld()->SpawnActor<AActor>(ProjectileClass,SpawnTM,SpawnParams);
 }
 

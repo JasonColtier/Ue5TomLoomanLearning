@@ -23,6 +23,9 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;
+	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComponent;
 
@@ -39,9 +42,14 @@ protected:
 	UInputAction* IA_MoveY;
 	
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputAction* IA_MoveTurn;
+	UInputAction* IA_CamYaw;
 
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* IA_CamPitch;
 
+	
+	UPROPERTY(EditAnywhere,Category="Input")
+	UInputAction* IA_PrimaryAction;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -57,4 +65,6 @@ private:
 	void EnhancedInputMoveX(const FInputActionValue& Value);
 	void EnhancedInputMoveY(const FInputActionValue& Value);
 	void EnhancedInputTurn(const FInputActionValue& Value);
+	void EnhancedInputPitch(const FInputActionValue& Value);
+	void PrimaryAttack(const FInputActionValue& Value);
 };
