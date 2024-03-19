@@ -66,14 +66,14 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void ASCharachter::EnhancedInputMoveX(const FInputActionValue& Value)
 {
-	TRACE("MOVE ! %s",*Value.ToString())
+	TRACE("MOVE X ! %s",*Value.ToString())
 	AddMovementInput(GetActorRightVector(),Value.Get<float>());
 }
 
 void ASCharachter::EnhancedInputMoveY(const FInputActionValue& Value)
 {
-	TRACE("MOVE ! %s",*Value.ToString())
-	AddMovementInput(GetActorForwardVector(),Value.Get<float>());
+	TRACE("MOVE Y ! %s",*Value.ToString())
+	AddMovementInput(GetViewRotation().Vector(),Value.Get<float>());
 }
 
 void ASCharachter::EnhancedInputTurn(const FInputActionValue& Value)
@@ -91,7 +91,7 @@ void ASCharachter::EnhancedInputPitch(const FInputActionValue& Value)
 void ASCharachter::PrimaryAttack(const FInputActionValue& Value)
 {
 	TRACE("Spawn Projectile !");
-	const FTransform SpawnTM = FTransform(GetControlRotation(),GetMesh()->GetSocketLocation("Muzzle_01"));
+	const FTransform SpawnTM = FTransform(GetActorRotation(),GetMesh()->GetSocketLocation("Muzzle_01"));
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	GetWorld()->SpawnActor<AActor>(ProjectileClass,SpawnTM,SpawnParams);
