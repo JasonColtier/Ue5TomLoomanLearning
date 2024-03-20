@@ -18,10 +18,10 @@ public:
 	AExplodingBarrel();
 
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	TObjectPtr<UStaticMeshComponent> StaticMesh;
 
 	UPROPERTY(EditAnywhere)
-	URadialForceComponent* RadialForceComponent;
+	TObjectPtr<URadialForceComponent> RadialForceComponent;
 
 protected:
 	// Called when the game starts or when spawned

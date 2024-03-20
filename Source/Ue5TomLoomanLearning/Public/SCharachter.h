@@ -27,29 +27,29 @@ protected:
 	TSubclassOf<AActor> ProjectileClass;
 	
 	UPROPERTY(VisibleAnywhere)
-	USpringArmComponent* SpringArmComponent;
+	TObjectPtr<USpringArmComponent> SpringArmComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* CameraComponent;
+	TObjectPtr<UCameraComponent> CameraComponent;
 
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputMappingContext* InputMappingContext;
+	TObjectPtr<UInputMappingContext> InputMappingContext;
 
 	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* IA_MoveX;
+	TObjectPtr<UInputAction> IA_MoveX;
 
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputAction* IA_MoveY;
+	TObjectPtr<UInputAction> IA_MoveY;
 	
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputAction* IA_CamYaw;
+	TObjectPtr<UInputAction> IA_CamYaw;
 
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputAction* IA_CamPitch;
+	TObjectPtr<UInputAction> IA_CamPitch;
 
 	
 	UPROPERTY(EditAnywhere,Category="Input")
-	UInputAction* IA_PrimaryAction;
+	TObjectPtr<UInputAction> IA_PrimaryAction;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

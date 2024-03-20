@@ -22,13 +22,13 @@ protected:
 
 
 	UPROPERTY(VisibleAnywhere)
-	USphereComponent* SphereComponent;
+	TObjectPtr<USphereComponent> SphereComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	UProjectileMovementComponent* ProjectileMovementComponent;
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
 	UPROPERTY(VisibleAnywhere)
-	UParticleSystemComponent* ParticleSystemComponent;
+	TObjectPtr<UParticleSystemComponent> ParticleSystemComponent;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
