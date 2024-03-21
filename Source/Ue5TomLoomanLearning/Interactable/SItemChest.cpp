@@ -3,9 +3,12 @@
 
 #include "SItemChest.h"
 
+#include "LogTools/LogTools.h"
+
 
 void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
+	TRACE("Recieve interact ! open chest");
 	LidMesh->SetRelativeRotation(FRotator(TargetPitch,0,0));
 	
 }

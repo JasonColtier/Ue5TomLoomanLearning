@@ -13,6 +13,10 @@ class UE5TOMLOOMANLEARNING_API USInteractionComp : public UActorComponent
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere)
+	float InteractionDistance = 1000;
+	
 	void PrimaryInteract();
 	
 public:	

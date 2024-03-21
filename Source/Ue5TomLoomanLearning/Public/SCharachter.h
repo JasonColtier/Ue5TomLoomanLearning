@@ -6,11 +6,13 @@
 #include "GameFramework/Character.h"
 #include "SCharachter.generated.h"
 
+class USInteractionComp;
 struct FInputActionValue;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UAnimMontage;
 
 UCLASS()
 class UE5TOMLOOMANLEARNING_API ASCharachter : public ACharacter
@@ -22,34 +24,42 @@ public:
 	ASCharachter();
 
 protected:
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ProjectileClass;
-	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> CameraComponent;
 
-	UPROPERTY(EditAnywhere,Category="Input")
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_MoveX;
 
-	UPROPERTY(EditAnywhere,Category="Input")
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_MoveY;
-	
-	UPROPERTY(EditAnywhere,Category="Input")
+
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_CamYaw;
 
-	UPROPERTY(EditAnywhere,Category="Input")
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_CamPitch;
 
-	
-	UPROPERTY(EditAnywhere,Category="Input")
+
+	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_PrimaryAction;
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> IA_PrimaryInteract;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USInteractionComp> InteractionComp;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TObjectPtr<UAnimMontage> AttackAnim;
+	
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> ProjectileClass;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -67,4 +77,5 @@ private:
 	void EnhancedInputTurn(const FInputActionValue& Value);
 	void EnhancedInputPitch(const FInputActionValue& Value);
 	void PrimaryAttack(const FInputActionValue& Value);
+	void PrimaryInteract(const FInputActionValue& Value);
 };

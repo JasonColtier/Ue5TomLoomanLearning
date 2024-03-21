@@ -16,7 +16,7 @@ class UE5TOMLOOMANLEARNING_API ASItemChest : public AActor , public ISGameplayIn
 public:
 
 	UPROPERTY(EditAnywhere)
-	float TargetPitch;
+	float TargetPitch = 110;
 	
 	void Interact_Implementation(APawn* InstigatorPawn) override;
 
