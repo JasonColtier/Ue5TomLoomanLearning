@@ -108,6 +108,7 @@ void ASCharachter::PrimaryAttack(const FInputActionValue& Value)
 		const FTransform SpawnTM = FTransform(GetActorRotation(), GetMesh()->GetSocketLocation("Muzzle_01"));
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
 		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
 	}, 0.2, false);
 }
