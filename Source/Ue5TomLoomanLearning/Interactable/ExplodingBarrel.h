@@ -34,6 +34,8 @@ private:
 
 	UFUNCTION(CallInEditor)
 	void Explode();
+
+	virtual void PostInitializeComponents() override;
 	
 public:
 	// Called every frame

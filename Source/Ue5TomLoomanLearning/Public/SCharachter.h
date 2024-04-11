@@ -45,6 +45,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_CamPitch;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> IA_Jump;
 
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_PrimaryAction;
@@ -61,6 +63,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
+
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -76,6 +80,7 @@ private:
 	void EnhancedInputMoveY(const FInputActionValue& Value);
 	void EnhancedInputTurn(const FInputActionValue& Value);
 	void EnhancedInputPitch(const FInputActionValue& Value);
+	void EnhancedInputJump(const FInputActionValue& Value);
 	void PrimaryAttack(const FInputActionValue& Value);
 	void PrimaryInteract(const FInputActionValue& Value);
 };

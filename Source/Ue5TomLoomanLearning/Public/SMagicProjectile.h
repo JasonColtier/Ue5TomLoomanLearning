@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UParticleSystemComponent> ParticleSystemComponent;
 
+	UPROPERTY(EditAnywhere)
+	float LifeTime = 4;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

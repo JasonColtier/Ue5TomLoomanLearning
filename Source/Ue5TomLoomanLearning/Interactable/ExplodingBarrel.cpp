@@ -5,6 +5,7 @@
 
 #include <LogTools/LogTools.h>
 
+#include "Logging/StructuredLog.h"
 #include "PhysicsEngine/RadialForceComponent.h"
 
 
@@ -18,8 +19,8 @@ AExplodingBarrel::AExplodingBarrel()
 	RadialForceComponent = CreateDefaultSubobject<URadialForceComponent>("Radial Force");
 
 	StaticMesh->SetupAttachment(RootComponent);
-
 	OnActorBeginOverlap.AddDynamic(this,&AExplodingBarrel::OnBeginOverlapp);
+
 }
 
 // Called when the game starts or when spawned
@@ -36,9 +37,14 @@ void AExplodingBarrel::OnBeginOverlapp(AActor* SelfActor, AActor* OtherActor)
 
 void AExplodingBarrel::Explode()
 {
-	TRACE("Explode barrel");
 	RadialForceComponent->FireImpulse();
 	SetLifeSpan(0.1);
+}
+
+void AExplodingBarrel::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
 }
 
 // Called every frame

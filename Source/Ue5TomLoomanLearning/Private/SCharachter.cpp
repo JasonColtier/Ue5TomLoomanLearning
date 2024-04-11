@@ -62,6 +62,7 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	EnhancedInputComponent->BindAction(IA_MoveY, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputMoveY);
 	EnhancedInputComponent->BindAction(IA_CamYaw, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputTurn);
 	EnhancedInputComponent->BindAction(IA_CamPitch, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputPitch);
+	EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputJump);
 	EnhancedInputComponent->BindAction(IA_PrimaryAction, ETriggerEvent::Started, this, &ASCharachter::PrimaryAttack);
 	EnhancedInputComponent->BindAction(IA_PrimaryInteract, ETriggerEvent::Started, this,
 	                                   &ASCharachter::PrimaryInteract);
@@ -89,6 +90,12 @@ void ASCharachter::EnhancedInputPitch(const FInputActionValue& Value)
 {
 	// TRACE("Pitch ! %s",*Value.ToString())
 	AddControllerPitchInput(Value.Get<float>());
+}
+
+void ASCharachter::EnhancedInputJump(const FInputActionValue& Value)
+{
+	// TRACE("Jump !)
+	Jump();
 }
 
 void ASCharachter::PrimaryAttack(const FInputActionValue& Value)

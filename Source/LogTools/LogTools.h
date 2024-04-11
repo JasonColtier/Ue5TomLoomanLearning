@@ -4,6 +4,7 @@
 #define LogTool_H
 
 #include "CoreMinimal.h"
+#include "Logging/StructuredLog.h"
 
 
 // Helper file to log symply
@@ -26,10 +27,25 @@ const FString Msg = FString::Printf(TEXT(Format), ##__VA_ARGS__); \
 UE_LOG(PI_Log, Log, TEXT("%s | %s() [%d] : %s"),*GetNameSafe(this),FUNC_NAME,__LINE__, *Msg);\
 }
 
+#define TRACE_FTM(Format,...)\
+{ \
+UE_LOGFMT(PI_Log, Log, Format, ##__VA_ARGS__);\
+}
+
+#define TRACE_FTM_WARN(Format,...)\
+{ \
+UE_LOGFMT(PI_Log, Warning, Format, ##__VA_ARGS__);\
+}
+
+#define TRACE_FTM_ERROR(Format,...)\
+{ \
+UE_LOGFMT(PI_Log, Error, Format, ##__VA_ARGS__);\
+}
+
 #define TRACE_WARN(Format, ...) \
 { \
 const FString Msg = FString::Printf(TEXT(Format), ##__VA_ARGS__); \
-UE_LOG(PI_Log, Warning, TEXT("%s | %s() [%d] : %s"),*GetNameSafe(this),FUNC_NAME,__LINE__, *Msg);\
+UE_LOG(PI_Log, Error, TEXT("%s | %s() [%d] : %s"),*GetNameSafe(this),FUNC_NAME,__LINE__, *Msg);\
 }
 
 #define TRACE_ERROR(Format, ...) \
