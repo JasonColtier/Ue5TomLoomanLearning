@@ -8,6 +8,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "LogTools/LogTools.h"
 #include "Ue5TomLoomanLearning/Interactable/SInteractionComp.h"
 
@@ -104,12 +106,30 @@ void ASCharachter::PrimaryAttack(const FInputActionValue& Value)
 	FTimerHandle Handle;
 	GetWorld()->GetTimerManager().SetTimer(Handle, [this]
 	{
-		TRACE("Spawn Projectile !");
-		const FTransform SpawnTM = FTransform(GetActorRotation(), GetMesh()->GetSocketLocation("Muzzle_01"));
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = this;
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		int32 SizeX;
+		int32 SizeY;
+		GetLocalViewingPlayerController()->GetViewportSize(SizeX, SizeY);
+		FVector WorldPos;
+		FVector WorldDir;
+		UGameplayStatics::DeprojectScreenToWorld(GetLocalViewingPlayerController(),
+		                                         FVector2d{(double)SizeX / 2, (double)SizeY / 2}, WorldPos, WorldDir);
+
+		FHitResult HitResult;
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldPos, WorldPos + (WorldDir * 3000), ECC_Camera);
+		DrawDebugLine(GetWorld(), WorldPos, WorldPos + (WorldDir * 3000), FColor::Orange, true);
+
+		if (bHit)
+		{
+			TRACE("Spawn Projectile !");
+			DrawDebugSphere(GetWorld(),HitResult.ImpactPoint,10,10,FColor::Blue,true);
+			const FTransform SpawnTM = FTransform(UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint), GetMesh()->GetSocketLocation("Muzzle_01"));
+			DrawDebugLine(GetWorld(), GetMesh()->GetSocketLocation("Muzzle_01"), GetMesh()->GetSocketLocation("Muzzle_01") + (UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint).Vector() * 3000), FColor::Blue, true);
+
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			SpawnParams.Instigator = this;
+			GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
+		}
 	}, 0.2, false);
 }
 
