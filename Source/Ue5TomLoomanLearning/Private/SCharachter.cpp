@@ -66,6 +66,7 @@ void ASCharachter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	EnhancedInputComponent->BindAction(IA_CamPitch, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputPitch);
 	EnhancedInputComponent->BindAction(IA_Jump, ETriggerEvent::Triggered, this, &ASCharachter::EnhancedInputJump);
 	EnhancedInputComponent->BindAction(IA_PrimaryAction, ETriggerEvent::Started, this, &ASCharachter::PrimaryAttack);
+	EnhancedInputComponent->BindAction(IA_SecondaryAction, ETriggerEvent::Started, this, &ASCharachter::SecondaryAttack);
 	EnhancedInputComponent->BindAction(IA_PrimaryInteract, ETriggerEvent::Started, this,
 	                                   &ASCharachter::PrimaryInteract);
 }
@@ -106,30 +107,18 @@ void ASCharachter::PrimaryAttack(const FInputActionValue& Value)
 	FTimerHandle Handle;
 	GetWorld()->GetTimerManager().SetTimer(Handle, [this]
 	{
-		int32 SizeX;
-		int32 SizeY;
-		GetLocalViewingPlayerController()->GetViewportSize(SizeX, SizeY);
-		FVector WorldPos;
-		FVector WorldDir;
-		UGameplayStatics::DeprojectScreenToWorld(GetLocalViewingPlayerController(),
-		                                         FVector2d{(double)SizeX / 2, (double)SizeY / 2}, WorldPos, WorldDir);
+		SpawnProjectile(ProjectileClass);
+	}, 0.2, false);
+}
 
-		FHitResult HitResult;
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, WorldPos, WorldPos + (WorldDir * 3000), ECC_Camera);
-		DrawDebugLine(GetWorld(), WorldPos, WorldPos + (WorldDir * 3000), FColor::Orange, true);
-
-		if (bHit)
-		{
-			TRACE("Spawn Projectile !");
-			DrawDebugSphere(GetWorld(),HitResult.ImpactPoint,10,10,FColor::Blue,true);
-			const FTransform SpawnTM = FTransform(UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint), GetMesh()->GetSocketLocation("Muzzle_01"));
-			DrawDebugLine(GetWorld(), GetMesh()->GetSocketLocation("Muzzle_01"), GetMesh()->GetSocketLocation("Muzzle_01") + (UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint).Vector() * 3000), FColor::Blue, true);
-
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			SpawnParams.Instigator = this;
-			GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
-		}
+void ASCharachter::SecondaryAttack(const FInputActionValue& Value)
+{
+	TRACE("Secondary Attack !");
+	PlayAnimMontage(AttackAnim);
+	FTimerHandle Handle;
+	GetWorld()->GetTimerManager().SetTimer(Handle, [this]
+	{
+		SpawnProjectile(SecondaryProjectileClass);
 	}, 0.2, false);
 }
 
@@ -137,4 +126,39 @@ void ASCharachter::PrimaryInteract(const FInputActionValue& Value)
 {
 	TRACE("PrimaryInteract");
 	InteractionComp->PrimaryInteract();
+}
+
+void ASCharachter::SpawnProjectile(TSubclassOf<AActor> ProjectileClassParam)
+{
+	int32 SizeX;
+	int32 SizeY;
+	GetLocalViewingPlayerController()->GetViewportSize(SizeX, SizeY);
+	FVector StartTrace;
+	FVector WorldDir;
+	UGameplayStatics::DeprojectScreenToWorld(GetLocalViewingPlayerController(),
+											 FVector2d{(double)SizeX / 2, (double)SizeY / 2}, StartTrace, WorldDir);
+
+	FHitResult HitResult;
+	FVector EndTrace = StartTrace + (WorldDir * 3000);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartTrace, EndTrace, ECC_Camera);
+	DrawDebugLine(GetWorld(), StartTrace, EndTrace, FColor::Orange, true);
+
+	FTransform SpawnTM;
+		
+	if (bHit)
+	{
+		TRACE("projectile hit !")
+		DrawDebugSphere(GetWorld(),HitResult.ImpactPoint,10,10,FColor::Blue,true);
+		DrawDebugLine(GetWorld(), GetMesh()->GetSocketLocation("Muzzle_01"), GetMesh()->GetSocketLocation("Muzzle_01") + (UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint).Vector() * 3000), FColor::Blue, true);
+		SpawnTM = FTransform(UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),HitResult.ImpactPoint), GetMesh()->GetSocketLocation("Muzzle_01"));
+	}else
+	{
+		SpawnTM = FTransform(UKismetMathLibrary::FindLookAtRotation(GetMesh()->GetSocketLocation("Muzzle_01"),EndTrace), GetMesh()->GetSocketLocation("Muzzle_01"));
+	}
+
+	TRACE("Spawn Projectile !");
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	GetWorld()->SpawnActor<AActor>(ProjectileClassParam, SpawnTM, SpawnParams);
 }

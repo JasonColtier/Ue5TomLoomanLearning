@@ -54,6 +54,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputAction> IA_PrimaryInteract;
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	TObjectPtr<UInputAction> IA_SecondaryAction;
+	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<USInteractionComp> InteractionComp;
 
@@ -63,6 +66,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Attack")
 	TSubclassOf<AActor> ProjectileClass;
 
+	UPROPERTY(EditAnywhere, Category="Attack")
+	TSubclassOf<AActor> SecondaryProjectileClass;
 
 
 	// Called when the game starts or when spawned
@@ -82,5 +87,8 @@ private:
 	void EnhancedInputPitch(const FInputActionValue& Value);
 	void EnhancedInputJump(const FInputActionValue& Value);
 	void PrimaryAttack(const FInputActionValue& Value);
+	void SecondaryAttack(const FInputActionValue& Value);
 	void PrimaryInteract(const FInputActionValue& Value);
+
+	void SpawnProjectile(TSubclassOf<AActor> ProjectileClass);
 };
